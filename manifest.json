@@ -19,9 +19,9 @@
   },
 
   "content_scripts": [{
-        "matches": ["https://steamcommunity.com/market/listings/730/*"],
-        "js": ["jquery.js", "main.js", "three.js", "render.js"]
-      }],
+      "matches": ["https://steamcommunity.com/market/listings/730/*"],
+      "js": ["vendor/jquery.js", "vendor/three.js", "main.js", "render.js"]
+    }],
 
   "permissions": ["activeTab"]
 }

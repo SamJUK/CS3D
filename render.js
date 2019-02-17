@@ -4,7 +4,7 @@
   File Desc: Handle rendering of object and interaction with it
 */
 
-function render(canvas, meshURL, textureURL){
+function render(canvas, meshURL, textureURL) {
   let debug = false;
 
   // Variables
@@ -40,8 +40,8 @@ function render(canvas, meshURL, textureURL){
   scene = new THREE.Scene();
 
   // Create And Add Lighting
-  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  var pointLight = new THREE.PointLight(0xffffff, .5);
+  let ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  let pointLight = new THREE.PointLight(0xffffff, .5);
   scene.add(ambientLight);
   scene.add(pointLight);
 
@@ -50,30 +50,37 @@ function render(canvas, meshURL, textureURL){
 
   // Add Mouse Movement Stuff
   let xy;
-  function handleMouseMove(e){
+  function handleMouseMove(e) {
     let t = { x: e.clientX, y: e.clientY };
-    let delta = { x: (xy.x - t.x), y: (xy.y - t.y) } // Distance Moved Since Last Trigger
+    let delta = { x: (xy.x - t.x), y: (xy.y - t.y) };
     xy = t;
-
     mesh.rotation.y -= (delta.x / 50);
   }
-  function handleMouseUp(){
+
+  function handleMouseUp() {
     window.removeEventListener('mousemove', handleMouseMove);
     window.removeEventListener('mouseup', handleMouseUp);
   }
-  function handleMouseDown(e){
+
+  function handleMouseDown(e) {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
     xy = { x: e.clientX, y: e.clientY }
   }
-  function handleScroll(e){
-    if(e.deltaY > 0){ // UP - Zoom In
-      if(mesh.position.z < -10)
-        mesh.position.z += .5
-    }else{ // DOWN - Zoom Out
-      if(mesh.position.z > -45)
-        mesh.position.z -= .5;
-    };
+
+  function handleScroll(e) {
+    let isScrollingUp = e.deltaY > 0;
+    if(isScrollingUp) {
+      if(mesh.position.z >= -10)
+        return;
+
+      mesh.position.z += .5
+    } else {
+      if(mesh.position.z <= -45)
+        return;
+
+      mesh.position.z -= .5;
+    }
     e.preventDefault();
   }
 
@@ -81,7 +88,7 @@ function render(canvas, meshURL, textureURL){
   canvas.addEventListener('wheel', handleScroll);
 
   //RENDER LOOP
-  (function render(){
+  (function render() {
     delta += 0.1;
     if(mesh)mesh.rotation.y += 0.01;
     renderer.render(scene, camera);
@@ -89,14 +96,14 @@ function render(canvas, meshURL, textureURL){
   })();
 
   // Load Model
-  loader.load(meshURL, function(geometry, materials) {
-      let texture = new THREE.TextureLoader().load(textureURL),
-          material = new THREE.MeshLambertMaterial({map: texture, morphTargets: true, side: THREE.Doubleside});
+  loader.load(meshURL, function(geometry) {
+      let texture  = new THREE.TextureLoader().load(textureURL);
+      let material = new THREE.MeshLambertMaterial({map: texture, morphTargets: true, side: THREE.Doubleside});
 
-      mesh = new THREE.Mesh(geometry, material); // Create Mesh
-      scene.add(mesh); // Add Mesh Into Scene
-      mesh.position.z = -25; // Set Mesh Pos
+      mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+      mesh.position.z = -25;
       mesh.position.y = -2;
-      mesh.rotation.x = .2; // Set Rotation
+      mesh.rotation.x = .2;
   });
-};
+}
