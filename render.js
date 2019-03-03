@@ -20,7 +20,19 @@ var render = {
 
     init: function (canvas, meshURL, textureURL)
     {
-        // @TODO: Validate we have the pass params & they are correct types
+        // Validate inputs
+        if(canvas instanceof HTMLElement === false) {
+            return console.error('Canvas is not an HTML Element');
+        }
+
+        if(this.isUrl(meshURL) === false) {
+            return console.error('Mesh URL is not an url')
+        }
+
+        if(this.isUrl(textureURL) === false) {
+            return console.error('Texture URL is not an url')
+        }
+
         this.canvas = canvas;
         this.meshURL = meshURL;
         this.textureURL = textureURL;
@@ -32,6 +44,12 @@ var render = {
 
         this.loader = new THREE.JSONLoader();
         this.loadModel().render();
+    },
+
+    isUrl: function (url)
+    {
+        var reg = /[(chrome\-extension|http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+        return url.match(reg);
     },
 
     createRenderer: function ()
