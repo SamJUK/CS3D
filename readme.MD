@@ -5,11 +5,7 @@ CS3D is a chrome extension that implements a 3D object viewer into steam market 
 Models are exported from SMD to JSON using blender, then loaded into WebGL using THREE.JS library.
 
 ## TODO
-- Implement position/rotation movement toggle
-- Improve rotational algorithm
-- Flesh out skins / weapon support
-- Change Icon 
-- Add 
+[Moved to Github issues](https://github.com/SamJUK/CS3D/issues)
 
 ## What weapons/skins are currently supported?
 - Karambit
