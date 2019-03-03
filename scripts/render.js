@@ -18,6 +18,11 @@ var render = {
     meshURL:    null, // Url path to our .JSON mesh file
     textureURL: null, // Url Path to the texture we want to apply to the model
 
+    mouseUp:    null, // Using .bind changes the func reference
+    mouseDown:  null, // Using .bind changes the func reference
+    mouseMove:  null, // Using .bind changes the func reference
+    mouseScroll:null, // Using .bind changes the func reference
+
     init: function (canvas, meshURL, textureURL)
     {
         // Validate inputs
@@ -160,15 +165,17 @@ var render = {
 
     handleMouseDown: function (e)
     {
-        window.addEventListener('mousemove', this.handleMouseMove.bind(this));
-        window.addEventListener('mouseup', this.handleMouseUp.bind(this));
+        this.mouseMove = this.handleMouseMove.bind(this);
+        this.mouseUp = this.handleMouseUp.bind(this);
+        window.addEventListener('mousemove', this.mouseMove);
+        window.addEventListener('mouseup', this.mouseUp);
         this.xy = {x: e.clientX, y: e.clientY}
     },
 
     handleMouseUp: function ()
     {
-        window.removeEventListener('mousemove', this.handleMouseMove);
-        window.removeEventListener('mouseup', this.handleMouseUp);
+        window.removeEventListener('mousemove', this.mouseMove);
+        window.removeEventListener('mouseup', this.mouseUp);
 
         return this;
     },
