@@ -23,7 +23,7 @@ let main = {
 
     logPluginInfoBanner: function ()
     {
-        var msg_template = `%c CS3D %cv${config.version}by SamJ %c http://www.samdjames.uk/CS3D`;
+        var msg_template = `%c CS3D %cv${config.version} by SamJ %c http://www.samdjames.uk/CS3D`;
         const console_info = [msg_template, "background: #000000;color: #00ff99", "background: #000000;color: #fff", ""];
         console.log.apply(console, console_info);
 
