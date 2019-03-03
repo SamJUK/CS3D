@@ -22,15 +22,15 @@ var render = {
     {
         // Validate inputs
         if(canvas instanceof HTMLElement === false) {
-            return console.error('Canvas is not an HTML Element');
+            return console.error(`${namespace} Canvas is not an HTML Element`);
         }
 
         if(this.isUrl(meshURL) === false) {
-            return console.error('Mesh URL is not an url')
+            return console.error(`${namespace} Mesh URL is not an url`);
         }
 
         if(this.isUrl(textureURL) === false) {
-            return console.error('Texture URL is not an url')
+            return console.error(`${namespace} Texture URL is not an url`);
         }
 
         this.canvas = canvas;
