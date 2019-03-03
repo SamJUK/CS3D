@@ -5,16 +5,13 @@
 */
 
 function render(canvas, meshURL, textureURL) {
-  let debug = false;
-
   // Variables
   let renderer,
       scene,
       camera,
       loader,
       mesh,
-      delta = 0,
-      prevTime = Date.now();
+      delta = 0;
 
   // Create & setup our scene Renderer
   renderer = new THREE.WebGLRenderer({
