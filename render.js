@@ -7,14 +7,14 @@
 
 var render = {
 
-    delta:      0,    //
+    delta:      0,
     xy:         null, // Mouse Cords
-    mesh:       null, //
-    scene:      null, // Reference to our scene object
-    camera:     null, // Reference to our camera object
-    canvas:     null, // Reference to the Canvas to draw the scene in
-    loader:     null, //
-    renderer:   null, // Reference to the WebGL Renderer
+    mesh:       null, // The mesh object
+    scene:      null, // Our scene object
+    camera:     null, // Our camera object
+    canvas:     null, // The Canvas to draw the scene in
+    loader:     null, // The JSON loader to fetch the model files
+    renderer:   null, // The WebGL Renderer
     meshURL:    null, // Url path to our .JSON mesh file
     textureURL: null, // Url Path to the texture we want to apply to the model
 
