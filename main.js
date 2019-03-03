@@ -110,5 +110,5 @@ jQuery(document).ready(()=> {
   if(debug) console.log(namespace + ' ' + meshURL);
   if(debug) console.log(namespace + ' ' + textureURL);
 
-  render(jQuery('#render')[0], meshURL, textureURL);
+  render.init(jQuery('#render')[0], meshURL, textureURL);
 });

@@ -1,106 +1,180 @@
 /**
-  File Name: render.js
-  File Author: SamJ
-  File Desc: Handle rendering of object and interaction with it
-*/
+ * File Name: render.js
+ * File Author: SamJ
+ * File Desc: Handle the render and control of the 3d viewer
+ */
 
-function render(canvas, meshURL, textureURL) {
-  // Variables
-  let renderer,
-      scene,
-      camera,
-      loader,
-      mesh,
-      delta = 0;
 
-  // Create & setup our scene Renderer
-  renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-    antialias: true
-  });
+var render = {
 
-  renderer.setClearColor(0x071116); // BG Color
-  renderer.setPixelRatio(window.devicePixelRatio); // Pixel Ratio
-  renderer.setSize(canvas.clientWidth, canvas.clientHeight); // Size
+    delta:      0,    //
+    xy:         null, // Mouse Cords
+    mesh:       null, //
+    scene:      null, // Reference to our scene object
+    camera:     null, // Reference to our camera object
+    canvas:     null, // Reference to the Canvas to draw the scene in
+    loader:     null, //
+    renderer:   null, // Reference to the WebGL Renderer
+    meshURL:    null, // Url path to our .JSON mesh file
+    textureURL: null, // Url Path to the texture we want to apply to the model
 
-  // Handle Resizing
-  window.addEventListener('resize',handleResize);
-  function handleResize(){
-      camera.aspect = canvas.clientWidth / canvas.clientHeight;
-      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-  }
+    init: function (canvas, meshURL, textureURL)
+    {
+        // @TODO: Validate we have the pass params & they are correct types
+        this.canvas = canvas;
+        this.meshURL = meshURL;
+        this.textureURL = textureURL;
 
-  // Create Our Camera
-  camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 10000);
+        this.createRenderer().setupRenderer();
+        this.createScene().setupScene();
 
-  // Create The Scene
-  scene = new THREE.Scene();
+        this.setupEvents();
 
-  // Create And Add Lighting
-  let ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  let pointLight = new THREE.PointLight(0xffffff, .5);
-  scene.add(ambientLight);
-  scene.add(pointLight);
+        this.loader = new THREE.JSONLoader();
+        this.loadModel().render();
+    },
 
-  // Create the JSONLoader
-  loader = new THREE.JSONLoader();
+    createRenderer: function ()
+    {
+        this.renderer = new THREE.WebGLRenderer({
+            canvas: this.canvas,
+            antialias: true
+        });
 
-  // Add Mouse Movement Stuff
-  let xy;
-  function handleMouseMove(e) {
-    let t = { x: e.clientX, y: e.clientY };
-    let delta = { x: (xy.x - t.x), y: (xy.y - t.y) };
-    xy = t;
-    mesh.rotation.y -= (delta.x / 50);
-  }
+        return this;
+    },
 
-  function handleMouseUp() {
-    window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('mouseup', handleMouseUp);
-  }
+    setupRenderer: function ()
+    {
+        this.renderer.setClearColor(0x071116);
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
 
-  function handleMouseDown(e) {
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    xy = { x: e.clientX, y: e.clientY }
-  }
+        return this;
+    },
 
-  function handleScroll(e) {
-    let isScrollingUp = e.deltaY > 0;
-    if(isScrollingUp) {
-      if(mesh.position.z >= -10)
-        return;
+    createScene: function ()
+    {
+        this.camera = new THREE.PerspectiveCamera(45, this.canvas.clientWidth / this.canvas.clientHeight, 0.1, 10000);
+        this.scene = new THREE.Scene();
+        return this;
+    },
 
-      mesh.position.z += .5
-    } else {
-      if(mesh.position.z <= -45)
-        return;
+    setupScene: function ()
+    {
+        var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        var pointLight = new THREE.PointLight(0xffffff, .5);
+        this.scene.add(ambientLight);
+        this.scene.add(pointLight);
 
-      mesh.position.z -= .5;
+        return this;
+    },
+
+    loadModel: function ()
+    {
+        var callback = function (geo) {
+            let texture = new THREE.TextureLoader().load(this.textureURL);
+            let material = new THREE.MeshLambertMaterial({map: texture, morphTargets: true, side: THREE.Doubleside});
+
+            this.mesh = new THREE.Mesh(geo, material);
+            this.scene.add(this.mesh);
+            this.mesh.position.z = -25;
+            this.mesh.position.y = -2;
+            this.mesh.rotation.x = .2;
+        };
+
+        this.loader.load(this.meshURL, callback.bind(this));
+
+        return this;
+    },
+
+    render: function ()
+    {
+      this.delta += 0.1;
+
+      if (this.mesh) {
+          this.mesh.rotation.y += 0.01;
+      }
+
+      this.renderer.render(this.scene, this.camera);
+      requestAnimationFrame(this.render.bind(this));
+
+      return this;
+    },
+
+    /**********
+     * EVENTS *
+     **********/
+    setupEvents: function ()
+    {
+        window.addEventListener('resize', this.handleWindowResize.bind(this));
+        this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
+        this.canvas.addEventListener('wheel', this.handleMouseScroll.bind(this));
+
+        return this;
+    },
+
+
+    handleWindowResize: function ()
+    {
+        var canvas_width = this.canvas.clientWidth;
+        var canvas_height = this.canvas.clientHeight;
+
+        this.camera.aspect = canvas_width / canvas_height;
+        this.renderer.setSize(canvas_width, canvas_height);
+
+        return this;
+    },
+
+    handleMouseMove: function (e)
+    {
+        let oldMousePos = this.xy;
+        let mousePos = {x: e.clientX, y: e.clientY};
+
+        let delta = {
+            x: (oldMousePos.x - mousePos.x),
+            y: (oldMousePos.y - mousePos.y)
+        };
+
+        this.xy = mousePos;
+        this.mesh.rotation.y -= (delta.x / 50);
+    },
+
+    handleMouseDown: function (e)
+    {
+        window.addEventListener('mousemove', this.handleMouseMove.bind(this));
+        window.addEventListener('mouseup', this.handleMouseUp.bind(this));
+        this.xy = {x: e.clientX, y: e.clientY}
+    },
+
+    handleMouseUp: function ()
+    {
+        window.removeEventListener('mousemove', this.handleMouseMove);
+        window.removeEventListener('mouseup', this.handleMouseUp);
+
+        return this;
+    },
+
+    handleMouseScroll: function (e)
+    {
+        // Check if scroll direction is up
+        if (e.deltaY > 0) {
+            if (this.mesh.position.z >= -10) {
+                return this;
+            }
+
+            this.mesh.position.z += .5;
+            e.preventDefault();
+            return this;
+        }
+
+        if (this.mesh.position.z <= -45) {
+            return this;
+        }
+
+        this.mesh.position.z -= .5;
+        e.preventDefault();
+        return this;
     }
-    e.preventDefault();
-  }
 
-  canvas.addEventListener('mousedown', handleMouseDown);
-  canvas.addEventListener('wheel', handleScroll);
-
-  //RENDER LOOP
-  (function render() {
-    delta += 0.1;
-    if(mesh)mesh.rotation.y += 0.01;
-    renderer.render(scene, camera);
-    requestAnimationFrame(render);
-  })();
-
-  // Load Model
-  loader.load(meshURL, function(geometry) {
-      let texture  = new THREE.TextureLoader().load(textureURL);
-      let material = new THREE.MeshLambertMaterial({map: texture, morphTargets: true, side: THREE.Doubleside});
-
-      mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
-      mesh.position.z = -25;
-      mesh.position.y = -2;
-      mesh.rotation.x = .2;
-  });
-}
+};
