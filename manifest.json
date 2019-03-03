@@ -20,7 +20,7 @@
 
   "content_scripts": [{
       "matches": ["https://steamcommunity.com/market/listings/730/*"],
-      "js": ["vendor/jquery.js", "vendor/three.js", "main.js", "render.js"]
+      "js": ["vendor/three.js", "config.js", "render.js", "main.js"]
     }],
 
   "permissions": ["activeTab"]
