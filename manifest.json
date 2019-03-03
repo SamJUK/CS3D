@@ -9,7 +9,7 @@
 
   "browser_action": {
    "default_icon": "icon.png",
-   "default_popup": "popup.html"
+   "default_popup": "menu/index.html"
   },
 
   "icons": {
@@ -20,7 +20,7 @@
 
   "content_scripts": [{
       "matches": ["https://steamcommunity.com/market/listings/730/*"],
-      "js": ["vendor/three.js", "config.js", "render.js", "main.js"]
+      "js": ["scripts/vendor/three.js", "scripts/config.js", "scripts/render.js", "scripts/main.js"]
     }],
 
   "permissions": ["activeTab"]
