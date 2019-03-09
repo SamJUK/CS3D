@@ -1,5 +1,4 @@
 # CS3D
-
 CS3D is a chrome extension that implements a 3D object viewer into steam market pages for supported weapons.
 
 Models are exported from SMD to JSON using blender, then loaded into WebGL using THREE.JS library.
