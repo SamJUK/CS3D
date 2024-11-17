@@ -1,33 +1,14 @@
-# CS3D
-CS3D is a chrome extension that implements a 3D object viewer into steam market pages for supported weapons.
+# CS3Dv2
 
-Models are exported from SMD to JSON using blender, then loaded into WebGL using THREE.JS library.
+A rebuild of the CS3D chrome plugin, to help guide implementation of similar solutions within CSGO & CS2.
 
-## TODO
-[Moved to Github issues](https://github.com/SamJUK/CS3D/issues)
+The source code of the original version of the chrome extension can be found at https://github.com/SamJUK/CS3D/tree/v1.0.0
 
-## What weapons/skins are currently supported?
-- Karambit
-  - Autotronic
-  - Lore
-  - Black Laminate
-- Flip
-  - Autotronic
-  - Lore
-  - Black Laminate
-- Bayonet
-  - Autotronic
-  - Lore
-  - Black Laminate
-- M9 Bayonet
-  - Autotronic
-  - Lore
-  - Black Laminate
-- Gut
-  - Autotronic
-  - Lore
-  - Black Laminate
-- Flip
-  - Autotronic
-  - Lore
-  - Black Laminate
+- Scripts: These are a collection of scripts and CLI tooling allowing automatic exporting and decompilation of Game Files to gather the models & textures needed.
+- Base: This is an API that provides a central location to manage models, textures and core JS files that help with implement a viewer into a webpage
+- Viewer: This extends the base component and takes url parameters to configure a 3D viewer. That then can be used in other sites via a iframe.
+- Examples/Chrome: This is a chrome plugin, that implements the 3D viewer into the steam marketplace, similar to how this repo originally worked.
+- Examples/Marketplace: Example use of the Base component via a iframe in a marketplace context
+- Examples/Viewer: 3D Model viewer implement via Iframe
+
+

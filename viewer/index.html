@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS3D Iframe</title>
+    <style>
+        * {
+            overflow: hidden;
+            box-sizing: border-box;
+            margin: 0;
+        }
+        body {
+            background-size: cover !important;
+        }
+        canvas {
+            width: 100vw;
+            height: 100vh;
+        }
+        .watermark::before {
+            content: 'CS3D IFRAME';
+            font-size: 5vw;
+            color: rgba(255, 255, 255, .05);
+            font-weight: 400;
+            position: fixed;
+            margin: auto;
+            font-family: sans-serif;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .logo {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            color: white;
+            font-family: monospace;
+            opacity: .3;
+        }
+        .logo span {
+            color: orange;
+        }
+    </style>
+</head>
+<!-- <body class="watermark"> -->
+<body>
+    <canvas id="stage"></canvas>
+    <h1 class="logo">CS3D<span>v2</span></h1>
+    <script type="module" src="./assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "model-viewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.163.0",
+    "vite": "^5.2.9"
+  }
+}

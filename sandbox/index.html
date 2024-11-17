@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS3D Sandbox</title>
+    <style>
+        :root {
+            --blue-300: hsl(201.29deg 39.24% 25.49%);
+            --blue-500: hsl(201.29deg 39.24% 15.49%);
+            --blue-700: hsl(201.29deg 39.24% 11.49%);
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --primary-300: var(--blue-300);
+            --primary-500: var(--blue-500);
+            --primary-700: var(--blue-700);
+        }
+        * {
+            overflow: hidden;
+            box-sizing: border-box;
+            margin: 0;
+        }
+        body {
+            background-size: cover !important;
+            
+        }
+        canvas {
+            width: 100vw;
+            height: 100vh;
+        }
+        .watermark::before {
+            content: 'CS3D IFRAME';
+            font-size: 5vw;
+            color: rgba(255, 255, 255, .05);
+            font-weight: 400;
+            position: fixed;
+            margin: auto;
+            font-family: sans-serif;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .logo {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            color: white;
+            font-family: monospace;
+            opacity: .3;
+        }
+        .logo span {
+            color: orange;
+        }
+        .controls {
+            padding: 1.25em;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: var(--primary-700);
+            border-right: 1px solid var(--primary-300);
+            width: 300px;
+            height: 100vh;
+            text-align: center;
+            overflow: visible;
+        }
+        .controls .header p {
+            font-size: 1.5em;
+            margin-bottom: 1em;
+        }
+        .control-body {
+            width: 80%;
+            margin: auto;
+            min-width: 150px;
+        }
+        .controls select, .controls input, .controls button {
+            height: 30px;
+            width: 100%;
+            background: var(--primary-500);
+            border: 1px solid var(--primary-300);
+            color: white;
+            margin-bottom: 1.25em;
+        }
+        .controls .close {
+            position: absolute;
+            z-index: 10;
+            right: -12px;
+            top: 12px;
+            color: white;
+            background: var(--primary-700);
+            border: 1px solid var(--primary-300);
+            border-radius: 50%;
+            padding: 5px;
+            width: 25px;
+            height: 25px;
+            display: grid;
+            place-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .controls.closed {
+            transform: translate(-85%, 0);
+        }
+        .controls.closed .header {
+            transform: rotate(-90deg);
+            top: 10px;
+            left: 135px;
+            position: relative;
+        }
+    </style>
+</head>
+<!-- <body class="watermark"> -->
+<body>
+    <div id="app">
+        <div class="controls" :class="{ closed: controls_closed }">
+            <div class="close" v-on:click="controls_closed = !controls_closed">
+                <span v-html="controls_closed ? '+' : 'x'"></span>
+            </div>
+            <div class="header" v-on:click="controls_closed = !controls_closed">
+                <p>Controls</p>
+            </div>
+            <div class="control-body">
+                <div class="row">
+                    <select name="weapon" id="weapon" v-model="weapon">
+                        <option value="" disabled>Select a Weapon</option>
+                        <option v-for="weapon in getWeaponOptions()" v-bind:value="weapon">
+                            {{ weapon.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <select name="skin" id="skin" v-model="skin">
+                        <option value="" selected>Default</option>
+                        <option v-for="skin in getSkinOptions()" v-bind:value="skin">
+                            {{ skin.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <select name="animation" id="animation" v-model="animation">
+                        <option value="auto_rotate" selected>Auto Rotate</option>
+                        <option value="stopped">Stopped</option>
+                        <option v-for="animation in getAnimationOptions()" v-bind:value="animation">
+                            {{ animation }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <button v-on:click="wiremesh = !wiremesh">{{ wiremesh ? 'Disable' : 'Enable' }} Wire Mesh</button>
+                </div>
+            </div>
+        </div>
+        <canvas id="stage"></canvas>
+        <h1 class="logo">CS3D<span>v2</span></h1>
+    </div>
+
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+    <script type="module" src="./assets/js/app.js"></script>
+</body>
+</html>

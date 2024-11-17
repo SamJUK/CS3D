@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS3D Viewer</title>
+
+    <style>
+        * { box-sizing: border-box; }
+        html, body { margin: 0; }
+        .container {
+            display: block;
+            width: calc(100vw - 60px);
+            margin: auto;
+        }
+        #stage, iframe {
+            height: calc(100vh - 120px);
+            width: 100%;
+            background: #000;
+        }
+        .actions {
+            display: flex;
+        }
+        .action-wrapper {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <!-- <canvas id="stage"></canvas> -->
+        <iframe :src="iframesrc" frameborder="0"></iframe>
+
+        <div class="actions">
+            <div class="action-wrapper weapon_selector">
+                <p>Weapon: <span v-html="selected_weapon"></span></p>
+                <select v-model="selected_weapon">
+                    <option disabled value="">Weapons</option>
+                    <option v-for="weapon in Object.keys(weapons)" v-bind:value="weapon">
+                        {{ weapons[weapon].name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="action-wrapper skin_selector">
+                <p>Skin: <span v-html="selected_skin"></span></p>
+                <select v-model="selected_skin">
+                    <option disabled value="">Skins</option>
+                    <option v-for="skin in getAvailableTextures()" v-bind:value="skin">
+                        {{ skin }}
+                    </option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+    <script type="module" src="./assets/js/app.js"></script>
+</body>
+</html>

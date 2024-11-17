@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+
+  "name": "CS3Dv2 - CS2 Steam Market 3D Model Viewer",
+  "description": "Add CS2 3D models for weapons & skins to their respective steam market page",
+  "version": "2.0",
+  "update_url": "http://www.samdjames.uk/CS3D/update.xml",
+
+  "browser_action": {
+   "default_icon": "icon.png",
+   "default_popup": "menu/index.html"
+  },
+
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+
+  "content_scripts": [{
+      "matches": ["https://steamcommunity.com/market/listings/730/*"],
+      "js": ["scripts/main.js"]
+    }],
+
+  "permissions": ["activeTab"]
+}
